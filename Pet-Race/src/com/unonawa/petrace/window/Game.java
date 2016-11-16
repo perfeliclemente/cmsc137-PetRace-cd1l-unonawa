@@ -41,9 +41,7 @@ public class Game extends Canvas implements Runnable {
 		level = loader.loadImage("/level.png"); // loading level
 		
 		
-		if (state == State.GAME){
-			background = loader.loadImage("/try.jpg");
-		}
+		background = loader.loadImage("/try.jpg");
 		
 		menu = new Menu();
 		help = new Help();
@@ -127,17 +125,17 @@ public class Game extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-		
 		g2d.translate(cam.getX(), cam.getY()); // begin of cam
+		
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		
 		if (state == State.GAME){
 			handler.render(g);
 		}
-		else if (state == State.MENU) {
+		else if (state == State.MENU){
 			menu.render(g2d);
 		}
-		else if (state == State.HELP) {
+		else if (state == State.HELP){
 			help.render(g2d);
 		}
 		g2d.translate(-cam.getX(), -cam.getY()); // end of cam
