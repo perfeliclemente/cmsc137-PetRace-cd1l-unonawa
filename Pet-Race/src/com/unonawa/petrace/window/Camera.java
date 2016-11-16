@@ -12,8 +12,12 @@ public class Camera {
 	}
 
 	public void tick(GameObject player){
-		x = -player.getX() + Game.WIDTH/2;
-		//x--;
+		//x++;
+		if (player.getX() >= 543 && player.getX() <= 2975){ // to be changed per level
+			x = -player.getX() + Game.WIDTH/2;
+		}
+
+		System.out.println(player.getX());
 	}
 	
 	public float getX() {

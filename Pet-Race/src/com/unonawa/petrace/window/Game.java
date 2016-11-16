@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-
 import com.unonawa.petrace.framework.KeyInput;
 import com.unonawa.petrace.framework.ObjectId;
 import com.unonawa.petrace.objects.Block;
@@ -19,30 +18,47 @@ public class Game extends Canvas implements Runnable {
 	private Thread thread;
 	
 	public static int WIDTH, HEIGHT;
+	public static State state;
 	
 	private BufferedImage level = null;
+	private BufferedImage background = null;
+	
+	private Menu menu;
+	private Help help;
+	
 	//Object 
 	Handler handler;
 	Camera cam;
-	
+
 	private void init(){
 		WIDTH = getWidth();
 		HEIGHT = getHeight();
 		
+		state = State.MENU;
+		
+		
 		BufferedImageLoader loader = new BufferedImageLoader();
 		level = loader.loadImage("/level.png"); // loading level
 		
+		
+		if (state == State.GAME){
+			background = loader.loadImage("/try.jpg");
+		}
+		
+		menu = new Menu();
+		help = new Help();
 		handler = new Handler();
 		
 		cam = new Camera(0, 0);
 		
 		LoadImageLevel(level);
-		
+		 
 		//handler.addObject(new Player(100, 100, handler, ObjectId.Player));
 		
 		//handler.createLevel();
 		
 		this.addKeyListener(new KeyInput(handler));
+		this.addMouseListener(new MouseInput());
 	}
 	
 	public synchronized void start(){
@@ -86,11 +102,13 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 	private void tick(){
-			handler.tick();
-			
-			for(int i = 0; i < handler.object.size(); i++){
-				if (handler.object.get(i).getId() == ObjectId.Player){
-					cam.tick(handler.object.get(i));
+			if (state == State.GAME){
+				handler.tick();
+				
+				for(int i = 0; i < handler.object.size(); i++){
+					if (handler.object.get(i).getId() == ObjectId.Player){
+						cam.tick(handler.object.get(i));
+					}
 				}
 			}
 	}
@@ -109,10 +127,19 @@ public class Game extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		
 		g2d.translate(cam.getX(), cam.getY()); // begin of cam
 		
-		handler.render(g);
-		
+		if (state == State.GAME){
+			handler.render(g);
+		}
+		else if (state == State.MENU) {
+			menu.render(g2d);
+		}
+		else if (state == State.HELP) {
+			help.render(g2d);
+		}
 		g2d.translate(-cam.getX(), -cam.getY()); // end of cam
 		////////////
 		g.dispose();
@@ -141,6 +168,6 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public static void main (String [] args){
-		new Window(800, 600, "Pet Race", new Game());
+		Window window = new Window(1080, 720, "Pet Race", new Game());
 	}
 }
