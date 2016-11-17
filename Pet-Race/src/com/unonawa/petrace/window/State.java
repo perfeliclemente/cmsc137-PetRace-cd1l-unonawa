@@ -4,6 +4,7 @@ public enum State {
 
 	MENU, 
 	GAME,
-	HELP
+	HELP,
+	CHARACTER
 	
 }

@@ -25,6 +25,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private Menu menu;
 	private Help help;
+	private Character character;
 	
 	//Object 
 	Handler handler;
@@ -36,7 +37,6 @@ public class Game extends Canvas implements Runnable {
 		
 		state = State.MENU;
 		
-		
 		BufferedImageLoader loader = new BufferedImageLoader();
 		level = loader.loadImage("/level.png"); // loading level
 		
@@ -45,9 +45,11 @@ public class Game extends Canvas implements Runnable {
 		
 		menu = new Menu();
 		help = new Help();
+		character = new Character();
 		handler = new Handler();
 		
 		cam = new Camera(0, 0);
+		
 		
 		LoadImageLevel(level);
 		 
@@ -130,6 +132,9 @@ public class Game extends Canvas implements Runnable {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		
 		if (state == State.GAME){
+			for (int i = 0; i < 10; i++ ){
+				g.drawImage(background, i*getWidth(), 0, getWidth(), getHeight(), this);
+			}
 			handler.render(g);
 		}
 		else if (state == State.MENU){
@@ -138,6 +143,11 @@ public class Game extends Canvas implements Runnable {
 		else if (state == State.HELP){
 			help.render(g2d);
 		}
+		else if (state == State.CHARACTER){
+			character.render(g2d);
+		}
+		
+		
 		g2d.translate(-cam.getX(), -cam.getY()); // end of cam
 		////////////
 		g.dispose();
@@ -166,6 +176,6 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public static void main (String [] args){
-		Window window = new Window(1080, 720, "Pet Race", new Game());
+		new Window(1080, 720, "Pet Race", new Game());
 	}
 }

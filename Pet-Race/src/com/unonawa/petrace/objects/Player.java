@@ -2,9 +2,7 @@ package com.unonawa.petrace.objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 
 import com.unonawa.petrace.framework.GameObject;
@@ -17,7 +15,7 @@ public class Player extends GameObject{
 	
 	private float gravity = 0.5f;
 	private float MAX_SPEED = 10; 
-	
+	public static Color player_color;
 	private Handler handler;
 	
 	public Player(float x, float y, Handler handler, ObjectId id) {
@@ -75,7 +73,7 @@ public class Player extends GameObject{
 	}  
 	
 	public void render(Graphics g) {
-		g.setColor(Color.BLUE);
+		g.setColor(player_color);
 		g.fillRect((int)x, (int)y, (int)width, (int)height);	
 	}
 
